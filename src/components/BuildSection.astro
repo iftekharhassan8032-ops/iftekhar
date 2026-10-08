@@ -19,7 +19,7 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         height="1536"
         muted
         playsinline
-        preload="none"
+        preload="auto"
         class="section-media block"
         style="width: calc(100% + 12px); margin-left: -6px; margin-right: -6px; max-width: none; background-color: var(--bg-editorial);"
       ></video>
@@ -41,19 +41,6 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    // Just-in-time video preloading when section approaches viewport
-    ScrollTrigger.create({
-      trigger: buildSec,
-      start: "top 120%",
-      once: true,
-      onEnter: () => {
-        if (buildVid.preload !== "auto") {
-          buildVid.preload = "auto";
-          buildVid.load();
-        }
-      },
-    });
-
     if (prefersReducedMotion) {
       buildVid.pause();
     } else {
@@ -73,8 +60,14 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         }
       };
 
-      buildVid.addEventListener("loadedmetadata", setDuration);
+      buildVid.addEventListener("loadedmetadata", () => {
+        setDuration();
+        if (currentProgress > 0) {
+          applyTime(currentProgress * duration);
+        }
+      });
       buildVid.addEventListener("canplay", setDuration);
+      buildVid.addEventListener("loadeddata", setDuration);
       setDuration();
 
       buildVid.pause();
@@ -83,7 +76,11 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         const safeTime = Math.max(0, Math.min(duration - 0.001, time));
         if (Math.abs(safeTime - lastAppliedTime) >= 0.005) {
           lastAppliedTime = safeTime;
-          buildVid.currentTime = safeTime;
+          try {
+            buildVid.currentTime = safeTime;
+          } catch (e) {
+            // Handled when video is ready
+          }
         }
       };
 

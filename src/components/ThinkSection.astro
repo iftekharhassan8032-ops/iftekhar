@@ -14,7 +14,7 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         poster="/assets/images/think.webp"
         muted
         playsinline
-        preload="none"
+        preload="auto"
         width="1024"
         height="1536"
         class="section-media"></video>
@@ -101,8 +101,14 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         }
       };
 
-      thinkVid.addEventListener("loadedmetadata", setDuration);
+      thinkVid.addEventListener("loadedmetadata", () => {
+        setDuration();
+        if (currentProgress > 0) {
+          applyTime(currentProgress * duration);
+        }
+      });
       thinkVid.addEventListener("canplay", setDuration);
+      thinkVid.addEventListener("loadeddata", setDuration);
       setDuration();
 
       thinkVid.pause();
@@ -111,7 +117,11 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         const safeTime = Math.max(0, Math.min(duration - 0.001, time));
         if (Math.abs(safeTime - lastAppliedTime) >= 0.005) {
           lastAppliedTime = safeTime;
-          thinkVid.currentTime = safeTime;
+          try {
+            thinkVid.currentTime = safeTime;
+          } catch (e) {
+            // Handled when video is ready
+          }
         }
       };
 
@@ -139,19 +149,6 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         if (isRafRunning && duration > 0) {
           applyTime(currentProgress * duration);
         }
-      });
-
-      // Pre-buffer video when approaching section
-      ScrollTrigger.create({
-        trigger: thinkSec,
-        start: "top 120%",
-        once: true,
-        onEnter: () => {
-          if (thinkVid.preload !== "auto") {
-            thinkVid.preload = "auto";
-            thinkVid.load();
-          }
-        },
       });
 
       ScrollTrigger.create({

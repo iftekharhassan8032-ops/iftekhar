@@ -12,7 +12,7 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
       poster="/assets/images/home.webp"
       muted
       playsinline
-      preload="metadata"
+      preload="auto"
       width="1024"
       height="1536"
       class="section-media"></video>
@@ -48,8 +48,14 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         }
       };
 
-      vid.addEventListener("loadedmetadata", setDuration);
+      vid.addEventListener("loadedmetadata", () => {
+        setDuration();
+        if (currentProgress > 0) {
+          applyTime(currentProgress * duration);
+        }
+      });
       vid.addEventListener("canplay", setDuration);
+      vid.addEventListener("loadeddata", setDuration);
       setDuration();
 
       vid.pause();
@@ -58,7 +64,11 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         const safeTime = Math.max(0, Math.min(duration - 0.001, time));
         if (Math.abs(safeTime - lastAppliedTime) >= 0.005) {
           lastAppliedTime = safeTime;
-          vid.currentTime = safeTime;
+          try {
+            vid.currentTime = safeTime;
+          } catch (e) {
+            // Handled when video is ready
+          }
         }
       };
 
