@@ -14,10 +14,12 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
       <video
         id="build-video"
         src="/assets/videos/build.mp4"
-        poster="/assets/images/build.png"
+        poster="/assets/images/build.webp"
+        width="1024"
+        height="1536"
         muted
         playsinline
-        preload="auto"
+        preload="none"
         class="section-media block"
         style="width: calc(100% + 12px); margin-left: -6px; margin-right: -6px; max-width: none; background-color: var(--bg-editorial);"
       ></video>
@@ -38,6 +40,19 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+
+    // Just-in-time video preloading when section approaches viewport
+    ScrollTrigger.create({
+      trigger: buildSec,
+      start: "top 120%",
+      once: true,
+      onEnter: () => {
+        if (buildVid.preload !== "auto") {
+          buildVid.preload = "auto";
+          buildVid.load();
+        }
+      },
+    });
 
     if (prefersReducedMotion) {
       buildVid.pause();

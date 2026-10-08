@@ -11,10 +11,12 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
       <video
         id="taste-video"
         src="/assets/videos/taste.mp4"
-        poster="/assets/images/taste.png"
+        poster="/assets/images/taste.webp"
         muted
         playsinline
-        preload="auto"
+        preload="none"
+        width="1024"
+        height="1536"
         class="section-media"></video>
     </div>
   </div>
@@ -91,6 +93,19 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         if (isRafRunning && duration > 0) {
           applyTime(currentProgress * duration);
         }
+      });
+
+      // Pre-buffer video when approaching section
+      ScrollTrigger.create({
+        trigger: tasteSec,
+        start: "top 120%",
+        once: true,
+        onEnter: () => {
+          if (tasteVid.preload !== "auto") {
+            tasteVid.preload = "auto";
+            tasteVid.load();
+          }
+        },
       });
 
       ScrollTrigger.create({

@@ -11,10 +11,12 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
       <video
         id="think-video"
         src="/assets/videos/think.mp4"
-        poster="/assets/images/think.png"
+        poster="/assets/images/think.webp"
         muted
         playsinline
-        preload="auto"
+        preload="none"
+        width="1024"
+        height="1536"
         class="section-media"></video>
 
       <!-- REAL VISIBLE HTML/CSS PATCH FOR EDITORIAL ARROW OVER 'even a you.' -->
@@ -137,6 +139,19 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
         if (isRafRunning && duration > 0) {
           applyTime(currentProgress * duration);
         }
+      });
+
+      // Pre-buffer video when approaching section
+      ScrollTrigger.create({
+        trigger: thinkSec,
+        start: "top 120%",
+        once: true,
+        onEnter: () => {
+          if (thinkVid.preload !== "auto") {
+            thinkVid.preload = "auto";
+            thinkVid.load();
+          }
+        },
       });
 
       ScrollTrigger.create({

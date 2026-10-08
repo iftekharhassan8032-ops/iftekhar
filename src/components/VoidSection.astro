@@ -14,10 +14,13 @@ import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
     <!-- 1. Bottom Layer: Hidden Poster Artwork -->
     <img
       id="void-image"
-      src="/assets/images/void.png"
+      src="/assets/images/void.webp"
       alt="05 / VOID"
+      width="1024"
+      height="1536"
       class="section-media block relative z-0 select-none"
-      loading="eager"
+      loading="lazy"
+      decoding="async"
       draggable="false"
     />
 
