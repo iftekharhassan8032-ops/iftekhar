@@ -1,0 +1,110 @@
+---
+// TasteSection.astro - Section 03 / TASTE (Full-Width Continuous Section Canvas with Interactive Header Hotspots)
+import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
+---
+
+<section id="taste" class="site-section">
+  <div class="section-canvas relative">
+    <SectionHeaderHotspots />
+    <!-- Overflow-hidden wrapper to clip bottom blank image/video margin and seamlessly connect to BUILD -->
+    <div class="overflow-hidden w-full" style="margin-bottom: -5.5%;">
+      <video
+        id="taste-video"
+        src="/assets/videos/taste.mp4"
+        poster="/assets/images/taste.png"
+        muted
+        playsinline
+        preload="auto"
+        class="section-media"></video>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const tasteVid = document.getElementById("taste-video") as HTMLVideoElement;
+  const tasteSec = document.getElementById("taste");
+
+  if (tasteVid && tasteSec) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      tasteVid.pause();
+    } else {
+      let duration = 3.0;
+      let targetProgress = 0;
+      let currentProgress = 0;
+      let isRafRunning = false;
+      let lastAppliedTime = -1;
+
+      const setDuration = () => {
+        if (
+          tasteVid.duration &&
+          !isNaN(tasteVid.duration) &&
+          tasteVid.duration > 0
+        ) {
+          duration = tasteVid.duration;
+        }
+      };
+
+      tasteVid.addEventListener("loadedmetadata", setDuration);
+      tasteVid.addEventListener("canplay", setDuration);
+      setDuration();
+
+      tasteVid.pause();
+
+      const applyTime = (time: number) => {
+        const safeTime = Math.max(0, Math.min(duration - 0.001, time));
+        if (Math.abs(safeTime - lastAppliedTime) >= 0.005) {
+          lastAppliedTime = safeTime;
+          tasteVid.currentTime = safeTime;
+        }
+      };
+
+      const updateScrub = () => {
+        const diff = targetProgress - currentProgress;
+
+        if (Math.abs(diff) > 0.0004) {
+          currentProgress += diff * 0.12;
+
+          if (duration > 0 && !tasteVid.seeking) {
+            applyTime(currentProgress * duration);
+          }
+
+          requestAnimationFrame(updateScrub);
+        } else {
+          currentProgress = targetProgress;
+          if (duration > 0) {
+            applyTime(currentProgress * duration);
+          }
+          isRafRunning = false;
+        }
+      };
+
+      tasteVid.addEventListener("seeked", () => {
+        if (isRafRunning && duration > 0) {
+          applyTime(currentProgress * duration);
+        }
+      });
+
+      ScrollTrigger.create({
+        trigger: tasteSec,
+        start: "top 80%",
+        end: "bottom 20%",
+        onUpdate: (self) => {
+          targetProgress = self.progress;
+          if (!isRafRunning) {
+            isRafRunning = true;
+            requestAnimationFrame(updateScrub);
+          }
+        },
+      });
+    }
+  }
+</script>

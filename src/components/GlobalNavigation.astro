@@ -1,0 +1,544 @@
+---
+// GlobalNavigation.astro - Sticky HTML Navbar & Refined Compact Editorial Navigation Panel
+---
+
+<!-- STICKY REAL HTML NAVBAR (Appears dynamically only when section header leaves top viewport) -->
+<header
+  id="sticky-global-nav"
+  class="fixed top-0 left-0 w-full z-40 py-3 sm:py-4 px-6 sm:px-10 md:px-16 flex items-center justify-between pointer-events-none select-none text-[#0a0a0a] transition-all duration-300 -translate-y-full opacity-0 backdrop-blur-md bg-[#f3f1e9]/95 border-b border-black/5"
+>
+  <!-- Left: IF* Brand Link -->
+  <div class="pointer-events-auto">
+    <a
+      href="#home"
+      class="brand-link flex items-center gap-0.5 text-2xl md:text-3xl font-bold tracking-tight text-current hover:opacity-80 transition-opacity"
+    >
+      <span class="font-display font-extrabold text-2xl md:text-3xl">IF</span>
+      <span class="text-lg md:text-xl -mt-1.5 font-display text-current">✦</span
+      >
+    </a>
+  </div>
+
+  <!-- Center (Desktop only): Section Links -->
+  <nav
+    class="hidden md:flex items-center gap-6 lg:gap-8 font-mono text-[11px] lg:text-xs tracking-wider uppercase pointer-events-auto"
+  >
+    <a
+      href="#home"
+      class="sticky-nav-link active py-1 transition-colors"
+      data-section="home">01. HOME</a
+    >
+    <a
+      href="#think"
+      class="sticky-nav-link py-1 transition-colors"
+      data-section="think">02. THINK</a
+    >
+    <a
+      href="#taste"
+      class="sticky-nav-link py-1 transition-colors"
+      data-section="taste">03. TASTE</a
+    >
+    <a
+      href="#build"
+      class="sticky-nav-link py-1 transition-colors"
+      data-section="build">04. BUILD</a
+    >
+    <a
+      href="#void"
+      class="sticky-nav-link py-1 transition-colors"
+      data-section="void">05. VOID</a
+    >
+    <a
+      href="#contact"
+      class="sticky-nav-link py-1 transition-colors"
+      data-section="contact">06. CONTACT</a
+    >
+  </nav>
+
+  <!-- Right: Location & Real HTML Hamburger Button -->
+  <div class="flex items-center gap-4 sm:gap-6 pointer-events-auto">
+    <div
+      class="hidden sm:block text-right font-mono text-[10px] md:text-[11px] leading-tight opacity-90"
+    >
+      <div class="tracking-widest font-semibold">PATNA, INDIA</div>
+      <div class="tracking-wider opacity-70">25.61° N &nbsp; 85.14° E</div>
+    </div>
+
+    <!-- Real HTML Hamburger Button -->
+    <button
+      id="sticky-menu-btn"
+      class="hamburger-btn flex flex-col justify-center items-end gap-1.5 w-8 h-8 p-1 cursor-pointer focus:outline-none"
+      aria-label="Open Navigation Menu"
+      aria-expanded="false"
+    >
+      <span
+        class="line w-6 h-[2px] bg-current transition-transform duration-300"
+      ></span>
+      <span class="line w-4 h-[2px] bg-current transition-all duration-300"
+      ></span>
+      <span
+        class="line w-6 h-[2px] bg-current transition-transform duration-300"
+      ></span>
+    </button>
+  </div>
+</header>
+
+<!-- COMPACT EDITORIAL NAVIGATION OVERLAY (Upper solid off-white fill, middle menu block, lower visible page) -->
+<div
+  id="editorial-nav-overlay"
+  class="fixed inset-0 z-[100] flex flex-col justify-start opacity-0 pointer-events-none transition-opacity duration-300 select-none overflow-y-auto"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site Navigation"
+>
+  <!-- Backdrop for lower region where page is visible -->
+  <div
+    id="editorial-nav-backdrop"
+    class="fixed inset-0 bg-black/50 backdrop-blur-[2px] transition-opacity cursor-pointer"
+  >
+  </div>
+
+  <!-- Upper Solid Warm Off-White Sheet (Fills upper portion down to menu bottom) -->
+  <div
+    class="nav-panel relative z-10 w-full bg-[#f3f1e9] text-[#0a0a0a] border-b border-black/15 shadow-2xl"
+  >
+    <!-- Top Solid Off-White Empty Area (Shifted slightly upward for editorial breathing room) -->
+    <div class="w-full h-[5vh] sm:h-[6vh] min-h-[25px] max-h-[50px]"></div>
+
+    <!-- Centered Menu Block (with generous horizontal insets from left and right edges) -->
+    <div
+      class="w-full max-w-[530px] md:max-w-[550px] mx-auto px-8 sm:px-12 pb-14 flex flex-col box-border"
+    >
+      <!-- Top Header: Large IF* (left) and Large × (right) -->
+      <div
+        class="w-full flex items-center justify-between border-b-[1.5px] border-black pb-3 sm:pb-3.5 mb-0"
+      >
+        <a
+          href="#home"
+          class="overlay-brand flex items-center gap-0.5 text-3xl sm:text-4xl font-bold tracking-tight text-black hover:opacity-80 transition-opacity"
+        >
+          <span class="font-display font-extrabold text-3xl sm:text-4xl"
+            >IF</span
+          >
+          <span class="text-xl sm:text-2xl -mt-1 font-display">✦</span>
+        </a>
+
+        <!-- Large, clearly visible × Close Button -->
+        <button
+          id="editorial-nav-close"
+          class="p-1 -mr-1 text-4xl sm:text-5xl font-light leading-none text-black hover:text-[#6028ff] transition-colors cursor-pointer focus:outline-none"
+          aria-label="Close Navigation"
+        >
+          ×
+        </button>
+      </div>
+
+      <!-- Editorial Navigation Index List (-4% proportional size reduction for breathing room) -->
+      <nav class="editorial-nav-list flex flex-col">
+        <!-- 01 / HOME -->
+        <a
+          href="#home"
+          class="menu-item-link group flex items-baseline justify-between gap-4 text-black hover:text-[#6028ff] transition-colors"
+          data-section="home"
+        >
+          <span
+            class="font-display text-[23px] sm:text-[28.5px] uppercase tracking-tight group-hover:translate-x-1.5 transition-transform duration-200"
+            >01 / HOME</span
+          >
+          <span
+            class="font-mono text-[11.5px] sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+            >START HERE</span
+          >
+        </a>
+
+        <!-- 02 / THINK -->
+        <a
+          href="#think"
+          class="menu-item-link group flex items-baseline justify-between gap-4 text-black hover:text-[#6028ff] transition-colors"
+          data-section="think"
+        >
+          <span
+            class="font-display text-[23px] sm:text-[28.5px] uppercase tracking-tight group-hover:translate-x-1.5 transition-transform duration-200"
+            >02 / THINK</span
+          >
+          <span
+            class="font-mono text-[11.5px] sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+            >I NOTICE</span
+          >
+        </a>
+
+        <!-- 03 / TASTE -->
+        <a
+          href="#taste"
+          class="menu-item-link group flex items-baseline justify-between gap-4 text-black hover:text-[#6028ff] transition-colors"
+          data-section="taste"
+        >
+          <span
+            class="font-display text-[23px] sm:text-[28.5px] uppercase tracking-tight group-hover:translate-x-1.5 transition-transform duration-200"
+            >03 / TASTE</span
+          >
+          <span
+            class="font-mono text-[11.5px] sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+            >GOOD DESIGN</span
+          >
+        </a>
+
+        <!-- 04 / BUILD -->
+        <a
+          href="#build"
+          class="menu-item-link group flex items-baseline justify-between gap-4 text-black hover:text-[#6028ff] transition-colors"
+          data-section="build"
+        >
+          <span
+            class="font-display text-[23px] sm:text-[28.5px] uppercase tracking-tight group-hover:translate-x-1.5 transition-transform duration-200"
+            >04 / BUILD</span
+          >
+          <span
+            class="font-mono text-[11.5px] sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+            >MAKE THINGS</span
+          >
+        </a>
+
+        <!-- 05 / VOID -->
+        <a
+          href="#void"
+          class="menu-item-link group flex items-baseline justify-between gap-4 text-black hover:text-[#6028ff] transition-colors"
+          data-section="void"
+        >
+          <span
+            class="font-display text-[23px] sm:text-[28.5px] uppercase tracking-tight group-hover:translate-x-1.5 transition-transform duration-200"
+            >05 / VOID</span
+          >
+          <span
+            class="font-mono text-[11.5px] sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+            >TAKE A BREAK</span
+          >
+        </a>
+
+        <!-- 06 / CONTACT -->
+        <a
+          href="#contact"
+          class="menu-item-link group flex items-baseline justify-between gap-4 text-black hover:text-[#6028ff] transition-colors"
+          data-section="contact"
+        >
+          <span
+            class="font-display text-[23px] sm:text-[28.5px] uppercase tracking-tight group-hover:translate-x-1.5 transition-transform duration-200"
+            >06 / CONTACT</span
+          >
+          <span
+            class="font-mono text-[11.5px] sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+            >LET'S TALK</span
+          >
+        </a>
+      </nav>
+
+      <!-- SECONDARY EDITORIAL APPENDIX: PROJECTS (+12% increase for visual counterbalance) -->
+      <div class="projects-section flex flex-col mt-7 sm:mt-8">
+        <!-- Section Header: PROJECTS (left) & [ DEMO PROJECTS ] (right) -->
+        <div
+          class="projects-header flex items-baseline justify-between gap-4 pb-2.5 border-b-[1.5px] border-black"
+        >
+          <span
+            class="font-display text-lg sm:text-xl font-bold uppercase tracking-wider text-black"
+          >
+            PROJECTS
+          </span>
+          <span
+            class="font-mono text-xs sm:text-[13px] tracking-widest text-[#6028ff] uppercase font-medium"
+          >
+            [ DEMO PROJECTS ]
+          </span>
+        </div>
+
+        <!-- Projects List (Category-first with quiet secondary brand name) -->
+        <div class="projects-list flex flex-col">
+          <!-- 01 FITNESS / GYM -->
+          <a
+            href="https://gymforfitnes.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-item-link group flex items-baseline justify-between gap-4 py-3 sm:py-3.5 border-b border-black/15 text-black hover:text-[#6028ff] transition-colors no-underline"
+          >
+            <span
+              class="font-mono text-[13.5px] sm:text-[15.5px] font-semibold tracking-wide uppercase group-hover:translate-x-1 transition-transform duration-200"
+            >
+              01 &nbsp;FITNESS / GYM
+            </span>
+            <span
+              class="font-mono text-xs sm:text-[13.5px] tracking-wider text-black/60 group-hover:text-[#6028ff] transition-colors whitespace-nowrap"
+            >
+              Phoenix Gym Barh
+            </span>
+          </a>
+
+          <!-- 02 KEYBOARD TOOL -->
+          <a
+            href="https://testedeteclado.pages.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-item-link group flex items-baseline justify-between gap-4 py-3 sm:py-3.5 border-b border-black/15 text-black hover:text-[#6028ff] transition-colors no-underline"
+          >
+            <span
+              class="font-mono text-[13.5px] sm:text-[15.5px] font-semibold tracking-wide uppercase group-hover:translate-x-1 transition-transform duration-200"
+            >
+              02 &nbsp;KEYBOARD TOOL
+            </span>
+            <span
+              class="font-mono text-xs sm:text-[13.5px] tracking-wider text-black/60 group-hover:text-[#6028ff] transition-colors whitespace-nowrap"
+            >
+              Teste Teclado
+            </span>
+          </a>
+
+          <!-- 03 FOOD / DELIVERY -->
+          <a
+            href="https://retrograde-radiation.pages.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-item-link group flex items-baseline justify-between gap-4 py-3 sm:py-3.5 border-b border-black/15 text-black hover:text-[#6028ff] transition-colors no-underline"
+          >
+            <span
+              class="font-mono text-[13.5px] sm:text-[15.5px] font-semibold tracking-wide uppercase group-hover:translate-x-1 transition-transform duration-200"
+            >
+              03 &nbsp;FOOD / DELIVERY
+            </span>
+            <span
+              class="font-mono text-xs sm:text-[13.5px] tracking-wider text-black/60 group-hover:text-[#6028ff] transition-colors whitespace-nowrap"
+            >
+              ChickN Bites
+            </span>
+          </a>
+
+          <!-- 04 DENTAL / HEALTHCARE -->
+          <a
+            href="https://eat-well-dental-clinic.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-item-link group flex items-baseline justify-between gap-4 py-3 sm:py-3.5 border-b-[1.5px] border-black text-black hover:text-[#6028ff] transition-colors no-underline"
+          >
+            <span
+              class="font-mono text-[13.5px] sm:text-[15.5px] font-semibold tracking-wide uppercase group-hover:translate-x-1 transition-transform duration-200"
+            >
+              04 &nbsp;DENTAL / HEALTHCARE
+            </span>
+            <span
+              class="font-mono text-xs sm:text-[13.5px] tracking-wider text-black/60 group-hover:text-[#6028ff] transition-colors whitespace-nowrap"
+            >
+              Eat Well Dental
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Solid Black Outlines between each section item in menu */
+  .editorial-nav-list {
+    border-top: 1.5px solid #000000 !important;
+  }
+  .menu-item-link {
+    border-bottom: 1.5px solid #000000 !important;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  /* Active section highlight in menu */
+  .menu-item-link.active-section {
+    color: #6028ff !important;
+    border-bottom-color: #000000 !important;
+  }
+  .menu-item-link.active-section span:first-child {
+    color: #6028ff !important;
+  }
+
+  .sticky-nav-link.active {
+    color: #6028ff;
+    position: relative;
+  }
+  .sticky-nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+  }
+
+  /* Sticky nav appearance state */
+  #sticky-global-nav.nav-visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Overlay open state */
+  #editorial-nav-overlay {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #editorial-nav-overlay.nav-open {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .nav-panel {
+    transform: translateY(-100%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #editorial-nav-overlay.nav-open .nav-panel {
+    transform: translateY(0) !important;
+  }
+
+  /* Dark mode for sticky nav in VOID section */
+  #sticky-global-nav.nav-dark {
+    background-color: rgba(8, 8, 8, 0.95);
+    color: #f5f5f5;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+</style>
+
+<script>
+  // Unified Navigation Controller
+  const stickyNav = document.getElementById("sticky-global-nav");
+  const overlay = document.getElementById("editorial-nav-overlay");
+  const menuLinks = document.querySelectorAll(".menu-item-link");
+  const stickyLinks = document.querySelectorAll(".sticky-nav-link");
+
+  // Open & Close Menu Handlers
+  function openMenu() {
+    overlay?.classList.add("nav-open");
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+  }
+
+  function closeMenu() {
+    overlay?.classList.remove("nav-open");
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+  }
+
+  // Robust Delegated Event Listener for all Menu Triggers and Closes
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    if (!target) return;
+
+    // Trigger Open: Sticky nav button OR section header transparent hotspots
+    if (
+      target.closest("#sticky-menu-btn") ||
+      target.closest(".section-menu-hotspot")
+    ) {
+      e.preventDefault();
+      openMenu();
+      return;
+    }
+
+    // Trigger Close: × Button or dark backdrop
+    if (
+      target.closest("#editorial-nav-close") ||
+      target.closest("#editorial-nav-backdrop")
+    ) {
+      e.preventDefault();
+      closeMenu();
+      return;
+    }
+
+    // Home link triggers (Overlay brand or Section home hotspots)
+    if (
+      target.closest(".overlay-brand") ||
+      target.closest(".section-home-hotspot") ||
+      target.closest(".brand-link")
+    ) {
+      closeMenu();
+      e.preventDefault();
+      document.querySelector("#home")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+  });
+
+  // Smooth scroll and auto-close when selecting a menu link
+  menuLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      closeMenu();
+      const targetId = link.getAttribute("href");
+      if (targetId && targetId.startsWith("#")) {
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    });
+  });
+
+  // CRITICAL INTERACTION RULE:
+  // When a section's baked-in header is visible in top viewport zone -> Hide sticky HTML navbar
+  // When section header leaves viewport -> Show sticky HTML navbar
+  const sectionHeaderZones = document.querySelectorAll(".section-header-zone");
+  let visibleHeadersCount = 0;
+
+  const headerObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleHeadersCount++;
+        } else {
+          visibleHeadersCount = Math.max(0, visibleHeadersCount - 1);
+        }
+      });
+
+      if (visibleHeadersCount > 0) {
+        stickyNav?.classList.remove("nav-visible");
+      } else {
+        stickyNav?.classList.add("nav-visible");
+      }
+    },
+    {
+      root: null,
+      rootMargin: "0px 0px -85% 0px",
+      threshold: 0,
+    },
+  );
+
+  sectionHeaderZones.forEach((zone) => headerObserver.observe(zone));
+
+  // Active Section Spy for Menu & Sticky Nav Links
+  const sections = document.querySelectorAll("section[id]");
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute("id");
+
+          if (id === "void") {
+            stickyNav?.classList.add("nav-dark");
+          } else {
+            stickyNav?.classList.remove("nav-dark");
+          }
+
+          menuLinks.forEach((link) => {
+            if (link.getAttribute("data-section") === id) {
+              link.classList.add("active-section");
+            } else {
+              link.classList.remove("active-section");
+            }
+          });
+
+          stickyLinks.forEach((link) => {
+            if (link.getAttribute("data-section") === id) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active");
+            }
+          });
+        }
+      });
+    },
+    { rootMargin: "-30% 0px -60% 0px", threshold: 0 },
+  );
+
+  sections.forEach((sec) => sectionObserver.observe(sec));
+</script>

@@ -1,0 +1,156 @@
+---
+// ThinkSection.astro - Section 02 / THINK (Full-Width Continuous Section Canvas with Interactive Header Hotspots)
+import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
+---
+
+<section id="think" class="site-section">
+  <div class="section-canvas relative">
+    <SectionHeaderHotspots />
+    <!-- Overflow-hidden wrapper to clip bottom blank margin and connect seamlessly to TASTE -->
+    <div class="overflow-hidden w-full relative" style="margin-bottom: -3%;">
+      <video
+        id="think-video"
+        src="/assets/videos/think.mp4"
+        poster="/assets/images/think.png"
+        muted
+        playsinline
+        preload="auto"
+        class="section-media"></video>
+
+      <!-- REAL VISIBLE HTML/CSS PATCH FOR EDITORIAL ARROW OVER 'even a you.' -->
+      <div class="editorial-arrow-patch" aria-hidden="true">
+        <svg
+          class="editorial-arrow-svg"
+          viewBox="0 0 32 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Mask matching surrounding paper background to completely hide original 'a' -->
+          <rect width="32" height="20" fill="#fbf9f4" />
+          <!-- Hand-drawn editorial arrow -->
+          <g
+            stroke="#161616"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M 4.5 10.5 C 9.5 10.3, 16.0 10.6, 23.5 10.5" />
+            <path d="M 18.5 6.0 L 23.8 10.5 L 18.2 14.8" />
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .editorial-arrow-patch {
+    position: absolute;
+    top: 56.25%;
+    left: 13.28%;
+    width: 3.125%;
+    height: 1.302%;
+    background-color: #fbf9f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 15;
+    line-height: 0;
+  }
+
+  .editorial-arrow-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const thinkVid = document.getElementById("think-video") as HTMLVideoElement;
+  const thinkSec = document.getElementById("think");
+
+  if (thinkVid && thinkSec) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      thinkVid.pause();
+    } else {
+      let duration = 3.0;
+      let targetProgress = 0;
+      let currentProgress = 0;
+      let isRafRunning = false;
+      let lastAppliedTime = -1;
+
+      const setDuration = () => {
+        if (
+          thinkVid.duration &&
+          !isNaN(thinkVid.duration) &&
+          thinkVid.duration > 0
+        ) {
+          duration = thinkVid.duration;
+        }
+      };
+
+      thinkVid.addEventListener("loadedmetadata", setDuration);
+      thinkVid.addEventListener("canplay", setDuration);
+      setDuration();
+
+      thinkVid.pause();
+
+      const applyTime = (time: number) => {
+        const safeTime = Math.max(0, Math.min(duration - 0.001, time));
+        if (Math.abs(safeTime - lastAppliedTime) >= 0.005) {
+          lastAppliedTime = safeTime;
+          thinkVid.currentTime = safeTime;
+        }
+      };
+
+      const updateScrub = () => {
+        const diff = targetProgress - currentProgress;
+
+        if (Math.abs(diff) > 0.0004) {
+          currentProgress += diff * 0.12;
+
+          if (duration > 0 && !thinkVid.seeking) {
+            applyTime(currentProgress * duration);
+          }
+
+          requestAnimationFrame(updateScrub);
+        } else {
+          currentProgress = targetProgress;
+          if (duration > 0) {
+            applyTime(currentProgress * duration);
+          }
+          isRafRunning = false;
+        }
+      };
+
+      thinkVid.addEventListener("seeked", () => {
+        if (isRafRunning && duration > 0) {
+          applyTime(currentProgress * duration);
+        }
+      });
+
+      ScrollTrigger.create({
+        trigger: thinkSec,
+        start: "top 80%",
+        end: "bottom 20%",
+        onUpdate: (self) => {
+          targetProgress = self.progress;
+          if (!isRafRunning) {
+            isRafRunning = true;
+            requestAnimationFrame(updateScrub);
+          }
+        },
+      });
+    }
+  }
+</script>

@@ -1,0 +1,115 @@
+---
+// BuildSection.astro - Section 04 / BUILD (Full-Width Continuous Section Canvas with Interactive Header Hotspots)
+import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
+---
+
+<section id="build" class="site-section bg-[#f3f1e9]">
+  <div class="section-canvas relative overflow-hidden bg-[#f3f1e9]">
+    <SectionHeaderHotspots />
+    <!-- Overflow-hidden wrapper to clip bottom blank margin and eliminate side edge encoding outlines -->
+    <div
+      class="overflow-hidden w-full relative bg-[#f3f1e9]"
+      style="margin-bottom: -5.5%;"
+    >
+      <video
+        id="build-video"
+        src="/assets/videos/build.mp4"
+        poster="/assets/images/build.png"
+        muted
+        playsinline
+        preload="auto"
+        class="section-media block"
+        style="width: calc(100% + 12px); margin-left: -6px; margin-right: -6px; max-width: none; background-color: var(--bg-editorial);"
+      ></video>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const buildVid = document.getElementById("build-video") as HTMLVideoElement;
+  const buildSec = document.getElementById("build");
+
+  if (buildVid && buildSec) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      buildVid.pause();
+    } else {
+      let duration = 3.0;
+      let targetProgress = 0;
+      let currentProgress = 0;
+      let isRafRunning = false;
+      let lastAppliedTime = -1;
+
+      const setDuration = () => {
+        if (
+          buildVid.duration &&
+          !isNaN(buildVid.duration) &&
+          buildVid.duration > 0
+        ) {
+          duration = buildVid.duration;
+        }
+      };
+
+      buildVid.addEventListener("loadedmetadata", setDuration);
+      buildVid.addEventListener("canplay", setDuration);
+      setDuration();
+
+      buildVid.pause();
+
+      const applyTime = (time: number) => {
+        const safeTime = Math.max(0, Math.min(duration - 0.001, time));
+        if (Math.abs(safeTime - lastAppliedTime) >= 0.005) {
+          lastAppliedTime = safeTime;
+          buildVid.currentTime = safeTime;
+        }
+      };
+
+      const updateScrub = () => {
+        const diff = targetProgress - currentProgress;
+
+        if (Math.abs(diff) > 0.0004) {
+          currentProgress += diff * 0.12;
+
+          if (duration > 0 && !buildVid.seeking) {
+            applyTime(currentProgress * duration);
+          }
+
+          requestAnimationFrame(updateScrub);
+        } else {
+          currentProgress = targetProgress;
+          if (duration > 0) {
+            applyTime(currentProgress * duration);
+          }
+          isRafRunning = false;
+        }
+      };
+
+      buildVid.addEventListener("seeked", () => {
+        if (isRafRunning && duration > 0) {
+          applyTime(currentProgress * duration);
+        }
+      });
+
+      ScrollTrigger.create({
+        trigger: buildSec,
+        start: "top 80%",
+        end: "bottom 20%",
+        onUpdate: (self) => {
+          targetProgress = self.progress;
+          if (!isRafRunning) {
+            isRafRunning = true;
+            requestAnimationFrame(updateScrub);
+          }
+        },
+      });
+    }
+  }
+</script>

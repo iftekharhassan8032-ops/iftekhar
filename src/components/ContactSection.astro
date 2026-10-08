@@ -1,0 +1,157 @@
+---
+// ContactSection.astro - Section 06 / CONTACT (Real Visible HTML GET IN TOUCH WhatsApp Button)
+import SectionHeaderHotspots from "./SectionHeaderHotspots.astro";
+---
+
+<section id="contact" class="site-section relative z-20">
+  <div class="section-canvas relative">
+    <SectionHeaderHotspots />
+
+    <!-- Base Contact Artwork -->
+    <img
+      src="/assets/images/get_in_touch.png"
+      alt="06 / CONTACT - LET'S TALK."
+      class="section-media block relative z-0"
+      loading="eager"
+    />
+
+    <!-- REAL VISIBLE HTML GET IN TOUCH <a> BUTTON EXACTLY MATCHING REFERENCE -->
+    <a
+      href="https://wa.me/919431241695?text=Hey%20Iftekhar%21%20I%20came%20across%20your%20website%20and%20wanted%20to%20say%20hi%20%F0%9F%91%8B"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Get in touch on WhatsApp"
+      class="get-in-touch-btn"
+    >
+      <span class="btn-text">GET IN TOUCH</span>
+      <svg
+        class="btn-arrow-svg"
+        viewBox="0 0 28 14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="2" y1="7" x2="25" y2="7"></line>
+        <polyline points="19 1.5 25 7 19 12.5"></polyline>
+      </svg>
+    </a>
+
+    <!-- REAL CLICKABLE INSTAGRAM HANDLE DIRECTLY BELOW 'AND MORE.' IN PURPLE THEME COLOR -->
+    <a
+      href="https://instagram.com/__rzeee"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Follow Iftekhar on Instagram (@__rzeee)"
+      class="instagram-handle-link"
+    >
+      @__rzeee
+    </a>
+  </div>
+</section>
+
+<style>
+  .get-in-touch-btn {
+    position: absolute;
+    top: 65.91%;
+    left: 8.08%;
+    width: 42.83%;
+    height: 4.96%;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 3vw, 30px);
+    padding: 0 clamp(10px, 2vw, 24px);
+    font-family:
+      "Courier Prime", "Courier New", Courier, ui-monospace, monospace;
+    font-weight: 400;
+    font-size: clamp(16px, 3.25vw, 27px);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    transition:
+      transform 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .btn-text {
+    display: inline-block;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-arrow-svg {
+    display: inline-block;
+    width: clamp(26px, 4.6vw, 40px);
+    height: auto;
+    color: #ffffff;
+    flex-shrink: 0;
+    transform: translateY(-0.5px);
+  }
+
+  /* Desktop hover feedback */
+  @media (hover: hover) and (pointer: fine) {
+    .get-in-touch-btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.92;
+    }
+  }
+
+  /* Mobile/touch tap feedback */
+  .get-in-touch-btn:active {
+    transform: scale(0.98);
+    opacity: 0.88;
+  }
+
+  /* Instagram handle styling - positioned in the left corner in bold purple theme color */
+  .instagram-handle-link {
+    position: absolute;
+    top: 84.0%;
+    left: 8.08%;
+    display: inline-flex;
+    align-items: center;
+    font-family:
+      "Space Mono", "Courier Prime", "Courier New", Courier, ui-monospace, monospace;
+    font-weight: 700;
+    font-size: clamp(13px, 1.85vw, 16.5px);
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    color: var(--purple-accent, #6028ff);
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .instagram-handle-link:hover {
+      opacity: 0.8;
+      transform: translateX(1px);
+    }
+  }
+
+  .instagram-handle-link:active {
+    opacity: 0.6;
+  }
+</style>

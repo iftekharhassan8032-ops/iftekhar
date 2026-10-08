@@ -1,0 +1,19 @@
+---
+// SectionHeaderHotspots.astro - Precision transparent interaction hotspots over baked-in section header
+---
+<div class="section-header-zone absolute top-0 left-0 w-full h-[14%] pointer-events-none z-30 select-none">
+  <!-- Transparent IF* Home Link Hotspot (Top Left with generous tap target) -->
+  <a 
+    href="#home" 
+    class="section-home-hotspot absolute top-0 left-0 w-[35%] h-full pointer-events-auto cursor-pointer" 
+    aria-label="Navigate to Home"
+  ></a>
+
+  <!-- Transparent Hamburger Menu Trigger Hotspot (Top Right with generous tap target) -->
+  <button 
+    type="button" 
+    class="section-menu-hotspot absolute top-0 right-0 w-[30%] h-full pointer-events-auto cursor-pointer bg-transparent border-none p-0 outline-none" 
+    aria-label="Open Editorial Navigation Menu"
+  ></button>
+</div>
+
